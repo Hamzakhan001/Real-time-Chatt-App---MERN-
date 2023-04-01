@@ -100,6 +100,7 @@ const Signup = () => {
 	style={{marginTop:15}}
 	onClick={submitHandler}	
 	>
+		Signup
 	</Button>
 </VStack>
   )

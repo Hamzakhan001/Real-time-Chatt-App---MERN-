@@ -31,10 +31,10 @@ function HomePage() {
   </TabList>
   <TabPanels>
     <TabPanel>
-    <Signup/>
+    <Login/>
     </TabPanel>
     <TabPanel>
-      <Login/>
+    <Signup/>
     </TabPanel>
   </TabPanels>
 </Tabs>
