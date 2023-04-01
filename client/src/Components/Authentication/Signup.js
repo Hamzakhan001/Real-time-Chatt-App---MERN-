@@ -1,5 +1,7 @@
 import React,{useState} from 'react';
-import {VStack,StackDivider,InputRightElement,Input,InputGroup,Box,FormControl, FormLabel,Button} from '@chakra-ui/react';
+import {VStack,useToast,StackDivider,InputRightElement,Input,InputGroup,Box,FormControl, FormLabel,Button} from '@chakra-ui/react';
+import axios from 'axios';
+import {useHistory} from 'react-router-dom'
 
 const Signup = () => {
 	const[show,setShow]=useState(false)
@@ -7,13 +9,83 @@ const Signup = () => {
 	const[pass,setPass]=useState()
 	const[confirmpass,setConfirmPass]=useState()
 	const[email,setEmail]=useState()
-	const[picture,setPicture]=useState()
+	const[picture,setPicture]=useState();
+	const [loading,setLoading]=useState(false);
+	const toast=useToast();
+	const history=useHistory()
+ 
 
+	// https://api.cloudinary.com/v1_1/dwdoxchcm/image/upload
 	const handleClick=()=>{
 		setShow(!show)
 	}
 
-	const postDetails=(pics)=>{
+	const postDetails=async (picture)=>{
+		setLoading(true);
+		debugger
+		if(picture == undefined){
+			toast({
+				title:"Please select an image",
+				status:"warning",
+				duration:5000,
+				isClosable:true,
+				position:"bottom"
+			});
+			return;
+		}
+
+		if(picture.type=="image/jpeg" || picture.type=="image/png"){
+			const data=new FormData();
+			data.append("file",picture);
+			data.append("upload_preset","chatapplication");
+			data.append("cloud_name","dwdoxchcm");
+			let dt=await axios.post("https://api.cloudinary.com/v1_1/dwdoxchcm/image/upload",data)
+			if(dt){
+				console.log("dt",dt)
+				setPicture(dt.data.url.toString());
+				setLoading(false);
+			}
+		}
+		else{
+			toast({
+				title:"Please select an image",
+				status:"warning",
+				duration:5000,
+				isClosable:true,
+				position:"bottom"
+			});
+		}
+
+		try{
+			const config={
+				headers:{
+					'Content-type':"application/json"
+				}
+			};
+			const {data}=await axios.post("/api/user",{name,email,pass,picture},config
+			);
+			toast({
+				title:"Registeration successful",
+				status:"success",
+				duration:5000,
+				isClosable:true,
+				position:"bottom"
+			});
+			localStorage.setItem("userInfo",JSON.stringify(data));
+			setLoading(false);
+			history.push('/chats')
+		}
+		catch(err){
+			toast({
+				title:"Error occured",
+				description:err.response.data.message,
+				status:"error",
+				duration:5000,
+				isClosable:true,
+				position:"bottom"
+			});
+
+		}
 
 	}
 	
@@ -99,6 +171,7 @@ const Signup = () => {
 	width="100%"
 	style={{marginTop:15}}
 	onClick={submitHandler}	
+	isLoading={loading}
 	>
 		Signup
 	</Button>
