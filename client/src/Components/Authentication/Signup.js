@@ -13,6 +13,14 @@ const Signup = () => {
 		setShow(!show)
 	}
 
+	const postDetails=(pics)=>{
+
+	}
+	
+	const submitHandler=()=>{
+
+	}
+
   return (
 	<VStack
   	spacing='5px'
@@ -73,6 +81,26 @@ const Signup = () => {
 		</InputRightElement>
 		</InputGroup>
 	</FormControl> 
+	<FormControl id="picture" isRequired>
+		<FormLabel>
+			Upload your picture
+		</FormLabel>
+		<InputGroup>
+		<Input
+			type="file"
+			p={1.5}
+			accept='image/*'
+			onChange={(e)=>{postDetails(e.target.files[0])}}
+			/>
+		</InputGroup>
+	</FormControl> 
+	<Button
+	colorScheme='blue'
+	width="100%"
+	style={{marginTop:15}}
+	onClick={submitHandler}	
+	>
+	</Button>
 </VStack>
   )
 }
