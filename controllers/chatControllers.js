@@ -1,5 +1,6 @@
 const asyncHandler=require("express-async-handler");
 const Chat=require("../models/chatModel");
+const User=require("../models/userModel")
 
 
 const accessChat=asyncHandler(async(req,res)=>{
@@ -10,15 +11,16 @@ const accessChat=asyncHandler(async(req,res)=>{
 		return res.sendStatus(400);
 	}
 
+	//if chat is found then populate the users array
 	var isChat= await Chat.find({
 		isGroupChat:false,
 		$and:[ 
 			{users:{$elemMatch:{$eq:req.user._id}}},
 			{users:{$elemMatch:{$eq:userId}}}
 		],
-	}).populate("users","-password")
-	.populate("latestMessage");
+	}).populate("users","-password").populate("latestMessage");
 
+	//populating latest message in message schema with users foung
 	isChat=await User.populate(isChat,{
 		path:"latestMessage.sender",
 		select:"name email pic"
