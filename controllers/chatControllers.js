@@ -23,7 +23,7 @@ const accessChat=asyncHandler(async(req,res)=>{
 	//populating latest message in message schema with users foung
 	isChat=await User.populate(isChat,{
 		path:"latestMessage.sender",
-		select:"name email pic"
+		select:"name email picture"
 	});
 	if(isChat.length>0){
 		res.send(isChat[0]);
@@ -49,3 +49,28 @@ const accessChat=asyncHandler(async(req,res)=>{
 	}
 
 })
+
+
+const fetchChats=asyncHandler(async(req,res)=>{
+	try{
+		Chat.find({users:{$elemMatch:{$eq:req.user._id}}})
+		.populate("users","-password")
+		.populate("groupAdmin","-password")
+		.populate("latestMessage")
+		.sort({updatedAt:-1})
+		.then(async (res)=>{
+			results=await User.populate(res,{
+				path:"latestMessage.sender",
+				select:"name picture email"
+			}) 
+		})
+	}
+	catch(err){
+		res.status(400);
+		throw new Error(err.message)
+	}
+})
+
+ 
+
+module.exports={accessChat,fetchChats}
