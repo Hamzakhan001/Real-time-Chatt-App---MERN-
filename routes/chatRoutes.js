@@ -1,5 +1,5 @@
 const express=require("express");
-
+const {accessChat,fetchChats} =require("../controllers/chatControllers")
 
 const router=express.Router()
 
