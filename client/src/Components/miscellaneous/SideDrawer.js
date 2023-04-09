@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import { Box, Button, Tooltip,Text,Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider} from '@chakra-ui/react'
 import {BellIcon,ChevronDownIcon} from '@chakra-ui/icons'
 import { chatState } from '../../Context/ChatProvider'
+import ProfileModal from './ProfileModal'
 
 function SideDrawer() {
 	const [search,setSearch]=useState()
@@ -54,7 +55,9 @@ function SideDrawer() {
 						/>
 					</MenuButton>
 					<MenuList>
+						<ProfileModal user={user}>
 						<MenuItem>My profile</MenuItem>
+						</ProfileModal>
 						<MenuDivider/>
 						<MenuItem>Logout</MenuItem>
 					</MenuList>
