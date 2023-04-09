@@ -22,7 +22,6 @@ const Signup = () => {
 
 	const postDetails=async (picture)=>{
 		setLoading(true);
-		debugger
 		if(picture == undefined){
 			toast({
 				title:"Please select an image",
@@ -73,7 +72,7 @@ const Signup = () => {
 			});
 			localStorage.setItem("userInfo",JSON.stringify(data));
 			setLoading(false);
-			history.push('/chats')
+			// history.push('/chats')
 		}
 		catch(err){
 			toast({
