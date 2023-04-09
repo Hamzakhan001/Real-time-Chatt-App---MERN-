@@ -1,10 +1,29 @@
-import { createContext } from "react";
+import { createContext,useContext,useEffect,useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const ChatContext=createContext();
 
 
-const chatProvider=({children})=>{
-	return <ChatContext.Provider>{children}</ChatContext.Provider>
+const ChatProvider=({children})=>{
+	const [user,setUser]=useState();
+	const history=useHistory()
+
+	useEffect(()=>{
+		const userInfo=JSON.parse(localStorage.getItem("userInfo"))
+		setUser(userInfo);
+
+		if(!userInfo){
+			history.pushState('/')
+		}
+	},[history])
+
+	return <ChatContext.Provider value={{user,setUser}}>{children}</ChatContext.Provider>
 }
 
-export default chatProvider;
+export const chatState=()=>{
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	return useContext(ChatContext);
+}
+
+
+export default ChatProvider;
