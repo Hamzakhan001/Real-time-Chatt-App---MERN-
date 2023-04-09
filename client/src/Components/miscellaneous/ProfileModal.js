@@ -19,15 +19,17 @@ function ProfileModal({user,children}) {
 		  fontFamily="Work sans"
 		  d="flex"
 		  justifyContent="center"
-		  >{user.name}</ModalHeader>
+		  >
+			{/* {user.name} */}
+		  </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-			<Image
+			{/* <Image
 			borderRadius="full"
 			boxSize="150px"
 			src={user.pic}
 			alt={user.name}
-			/>
+			/> */}
           </ModalBody>
 
           <ModalFooter>
