@@ -5,6 +5,7 @@ import { chatState } from '../../Context/ChatProvider'
 import ProfileModal from './ProfileModal'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
+import ChatLoading from './ChatLoading'
 
 function SideDrawer() {
 	const [search,setSearch]=useState()
@@ -121,6 +122,11 @@ function SideDrawer() {
 					 />
 					 <Button onClick={handleSearch}>Go</Button>
 				</Box>
+				{loading? (
+					<ChatLoading/>
+				):(
+					<span>resutls</span>
+				)}
 			</DrawerBody>
 			</DrawerContent>
 		</Drawer>
