@@ -6,6 +6,7 @@ import ProfileModal from './ProfileModal'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import ChatLoading from './ChatLoading'
+import {UserListItem} from '../UserAvatar/UserListItem'
 
 function SideDrawer() {
 	const [search,setSearch]=useState()
@@ -13,7 +14,7 @@ function SideDrawer() {
 	const [loading,setLoading]=useState(false)
 	const [loadingChat,setLoadingChat]=useState()
 
-	const {user }=chatState();
+	const {user,setSelectedChat,chats,setChats}=chatState();
 	const history=useHistory();
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -21,6 +22,37 @@ function SideDrawer() {
 	const logoutHandler=()=>{
 		localStorage.removeItem("userInfo");
 		// history.push("/")
+	}
+ 
+
+	const accessChat=async (userId)=>{
+		try{
+			setLoadingChat(true)
+
+			const config={
+				headers:{
+					"Content-type":"application/json",
+					Authorization:`Bearer ${user.token}`
+				},
+			};
+
+			const {data}=await axios.post('/api/chat',{userId,config})
+			setSelectedChat(data);
+			setLoadingChat(false);
+			onClose();
+		}
+		catch(err){
+			toast({
+				title:"Enter fetching chat",
+				description:err.message,
+				status:"error",
+				duration:5000,
+				isClosable:true,
+				position:'bottom-left',
+
+			})
+
+		}
 	}
 
 	const toast=useToast();
@@ -125,7 +157,13 @@ function SideDrawer() {
 				{loading? (
 					<ChatLoading/>
 				):(
-					<span>resutls</span>
+					searchResults?.map((user)=>{
+						<UserListItem 
+						key={user._id}
+					 	user={user}
+						handleFunction={()=>accessChat(user._id)}
+						/>
+					})
 				)}
 			</DrawerBody>
 			</DrawerContent>
